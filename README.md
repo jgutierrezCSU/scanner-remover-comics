@@ -24,5 +24,5 @@ A Python application for processing comic book files in CBZ (Comic Book Zip) and
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/comic-processing-tool.git
-   cd comic-processing-tool
+   git clone [https://github.com/yourusername/comic-processing-tool.git](https://github.com/jgutierrezCSU/scanner-remover-comics)
+   
