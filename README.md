@@ -50,8 +50,7 @@ python remove_comic_scanner.py
 
 You can download the latest version of the **Comic Processing Tool** from the following link:
 
-[Download the Comic Processing Tool v1.0](https://github.com/jgutierrezCSU/scanner-remover-comics/releases/tag/remove-comic-scanner)
-
+[Download the Comic Processing Tool v1.0](https://github.com/jgutierrezCSU/scanner-remover-comics/releases) 
 ### Summary
 
 The **Comic Processing Tool** is a standalone application designed to simplify the management and processing of comic book files in CBZ (Comic Book Zip) and CBR (Comic Book RAR) formats. This executable version provides users with an easy-to-use graphical interface, allowing comic enthusiasts to efficiently handle their comic collections without the need for programming knowledge.
