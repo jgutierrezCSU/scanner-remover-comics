@@ -1,4 +1,4 @@
-# scanner-remover-comics
+# scanner-remover-comics-logo
 Script is designed to process comic book files in CBZ (Comic Book Zip) and CBR (Comic Book RAR) formats and removes the last image (if its a scan). Key functions, including extracting page counts from comic metadata, comparing images, and updating comic information.
 
 
