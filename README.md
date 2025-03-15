@@ -43,6 +43,11 @@ python comic_processing_tool.py
 ## EXE
 
 ## Comic Processing Tool - Executable Version
+## Download
+
+You can download the latest version of the **Comic Processing Tool** from the following link:
+
+[Download the Comic Processing Tool v1.0](https://github.com/jgutierrezCSU/scanner-remover-comics/releases/tag/remove-comic-scanner)
 
 ### Summary
 
