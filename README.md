@@ -5,7 +5,7 @@ Script is designed to process comic book files in CBZ (Comic Book Zip) and CBR (
 ## Features
 
 - Extract page counts from `ComicInfo.xml` files.
-- Compare the last page of comics with target images.
+- Compare the last page of comics with target images(scanner logo image).
 - Update comic metadata based on image comparisons.
 - GUI built with Tkinter for easy interaction.
 
