@@ -9,9 +9,11 @@ Script is designed to process comic book files in CBZ (Comic Book Zip) and CBR (
 - Update comic metadata based on image comparisons.
 - GUI built with Tkinter for easy interaction.
 
+## Demo
+![Demo](https://github.com/jgutierrezCSU/scanner-remover-comics/blob/main/scanner_animation.gif)
+
+
 ## Code Requirements
-
-
 
 - Python 3.x
 - Pillow (PIL)
