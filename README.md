@@ -25,4 +25,13 @@ A Python application for processing comic book files in CBZ (Comic Book Zip) and
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/jgutierrezCSU/scanner-remover-comics
+
+2. **Install Pillow (if not already installed)**:
+```bash
+   pip install Pillow
+
+
+3. **Run application**:
+```bash
+python comic_processing_tool.py
    
