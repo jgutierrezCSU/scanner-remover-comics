@@ -10,7 +10,8 @@ Script is designed to process comic book files in CBZ (Comic Book Zip) and CBR (
 - GUI built with Tkinter for easy interaction.
 
 ## Demo
-![Demo](https://github.com/jgutierrezCSU/scanner-remover-comics/blob/main/scanner_animation.gif)
+<img src="https://github.com/jgutierrezCSU/scanner-remover-comics/blob/main/scanner_animation.gif" alt="Comic Processing Tool Demo" width="300"/>
+
 
 
 ## Code Requirements
