@@ -34,7 +34,7 @@ Script is designed to process comic book files in CBZ (Comic Book Zip) and CBR (
 python comic_processing_tool.py
 ```
 2. **In the GUI**:
-   *Click Browse to select a directory containing your CBZ and CBR files. 
-   *Click Browse to select a folder containing target images.\n
-   *Click Process Comics to start processing.\n
+   * Click Browse to select a directory containing your CBZ and CBR files. 
+   * Click Browse to select a folder containing target images.\n
+   * Click Process Comics to start processing.\n
    The application will compare the last page of each comic with the images in the selected folder and update the comic's metadata if matches are found.
