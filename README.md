@@ -34,7 +34,7 @@ Script is designed to process comic book files in CBZ (Comic Book Zip) and CBR (
 ##Usage
 1. **Run the application**:
 ```bash
-python comic_processing_tool.py
+python remove_comic_scanner.py
 ```
 2. **In the GUI**:
    * Click Browse to select a directory containing your CBZ and CBR files. 
