@@ -66,6 +66,6 @@ The **Comic Processing Tool** is a standalone application designed to simplify t
 
 - Simply download the executable file and run it on your Windows machine.
 - Use the GUI to select directories containing your comic files and target images
-  (you should extract your target images from you cbz or cbr with winzip or alternative).
+  (you should extract your target images from the cbz or cbr with winrar or alternative).
 - Click the "Process Comics" button to start the processing.
 
