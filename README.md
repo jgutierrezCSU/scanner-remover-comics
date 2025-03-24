@@ -9,6 +9,10 @@ Script is designed to process comic book files in CBZ (Comic Book Zip) and CBR (
 - Update comic metadata based on image comparisons.
 - GUI built with Tkinter for easy interaction.
 
+## Limitations
+- Currently only compares last page
+- Only compares if last page is a jpg
+
 ## Demo
 <img src="https://github.com/jgutierrezCSU/scanner-remover-comics/blob/main/scanner_animation.gif" alt="Comic Processing Tool Demo" width="450"/>
 
