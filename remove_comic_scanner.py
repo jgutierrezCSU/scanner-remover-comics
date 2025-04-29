@@ -67,8 +67,7 @@ def extract_second_and_last(item_list):
         
 MATCH_LIST = {}  # Dictionary to store matched files with their match status
 def compare_pages_with_target(cbz_file, target_image_path, cbz_details_lst, option):
-    print("cur comic: -->", cbz_file)
-    
+    print("option: -->", option)  
     # Initialize the match status for this cbz_file if not already present
     if cbz_file not in MATCH_LIST:
         MATCH_LIST[cbz_file] = {'first_match': False, 'last_match': False}
@@ -87,7 +86,7 @@ def compare_pages_with_target(cbz_file, target_image_path, cbz_details_lst, opti
     try:
         with zipfile.ZipFile(cbz_file, 'r') as zip_ref:
             # Check for last page match 
-            if option in ['last', 'both'] and last_page_filename in zip_ref.namelist():
+            if any(opt in ['last'] for opt in option) and last_page_filename in zip_ref.namelist():
                 if not match_outcome['last_match']:
                     print("*In Last OPTION*")
                     last_page_path = os.path.join("temp", last_page_filename)
@@ -100,7 +99,7 @@ def compare_pages_with_target(cbz_file, target_image_path, cbz_details_lst, opti
                         print(f"Last page match FOUND: {last_page_filename}")
 
             # Check for first page match
-            if option in ['first', 'both'] and first_page_filename in zip_ref.namelist():
+            if any(opt in ['first'] for opt in option) and last_page_filename in zip_ref.namelist():
                 if not match_outcome['first_match']:
                     print("In first OPTION")
                     first_page_path = os.path.join("temp", first_page_filename)
@@ -238,7 +237,7 @@ def make_new_cbz_file(cbz_file, cbz_details_lst, page_count, option):
                 logger.warning("No ComicInfo.xml found in the source CBZ")
             
             # Process based on the selected option
-            if option == "first":
+            if "first" in option:
                 # Skip the first image and renumber the rest
                 for new_index, old_filename in enumerate(image_files[1:], 1):
                     new_filename = f"{new_index:02d}{os.path.splitext(old_filename)[1]}"
@@ -249,7 +248,7 @@ def make_new_cbz_file(cbz_file, cbz_details_lst, page_count, option):
                     except Exception as file_error:
                         logger.error(f"Error processing file {old_filename}: {file_error}")
                         raise
-            elif option == "last":
+            if "last" in option:
                 logger.info("Processing option: remove last file")
                 # ComicInfo.xml is already handled above, so we can now process the image files
                 process_last_file_from_cbz(source_zip, target_zip)
@@ -277,15 +276,9 @@ def make_new_cbz_file(cbz_file, cbz_details_lst, page_count, option):
             os.remove(temp_cbz)
         return False
 
-def extract_comic_info(cbz_file):
-    """Extracts Locally the ComicInfo.xml from the CBZ file for editing and return its path."""
-    comic_info_path = 'ComicInfo.xml'
-    with zipfile.ZipFile(cbz_file, 'r') as zip_ref:
-        zip_ref.extract(comic_info_path)
-    return comic_info_path
 
 
-def process_cbz_and_cbr_files(directory, target_image_path, option):
+def process_cbz_and_cbr_files(directory, target_image_path, selected_options):
     """Process all CBZ and CBR files in the specified directory and its subdirectories."""
     for dirpath, _, filenames in os.walk(directory):
         for filename in filenames:
@@ -293,32 +286,48 @@ def process_cbz_and_cbr_files(directory, target_image_path, option):
                 cbz_file = os.path.join(dirpath, filename)
                 cbz_details_lst, first_page, last_page = get_mult_info_cbz(cbz_file)
                 page_count = len(cbz_details_lst) - 1  # Minus the XML file
-                option="last"
+               
                 if cbz_details_lst is not None:                    
                     # Use the updated comparison function
                     print("cbz_details_lst=",cbz_details_lst)
-                    match_outcome = compare_pages_with_target(cbz_file, target_image_path, cbz_details_lst, option)
+                    match_outcome = compare_pages_with_target(cbz_file, target_image_path, cbz_details_lst, selected_options)
                     print("match_outcome= ",match_outcome)
                     # Check if a match was found for either page
                     pages_to_remove = []
                     if match_outcome['first_match']:
                         pages_to_remove.append(first_page)  # Add first page to modified pages list
                         MATCH_LIST[cbz_file]['first_match'] = False                        
-                        make_new_cbz_file(cbz_file, cbz_details_lst,page_count,option)
+                        make_new_cbz_file(cbz_file, cbz_details_lst,page_count,selected_options)
                     if match_outcome['last_match']:
                         print("IN LAST")
                         pages_to_remove.append(last_page)  # Add last page to modified pages list
                         MATCH_LIST[cbz_file]['last_match'] = False
-                        make_new_cbz_file(cbz_file, cbz_details_lst,page_count,option)
+                        make_new_cbz_file(cbz_file, cbz_details_lst,page_count,selected_options)
                     # Only update if there are modified pages
                     if pages_to_remove:
                         final_modified_files.append(cbz_file)  # Track modified files
-
 
 def process_files():
     """Process files in the selected directory."""
     directory_path = entry_directory.get()
     target_image_folder = entry_image.get()
+    
+    # Get the selected processing option from the checkboxes
+    selected_options = []
+    if first_var.get():
+        selected_options.append("first")
+    if last_var.get():
+        selected_options.append("last")
+    if all_var.get():
+        selected_options.append("all")
+    
+    # Validate selections according to constraints
+    if len(selected_options) == 0:
+        messagebox.showerror("Error", "Please select at least one option (First, Last, or All).")
+        return
+    if "all" in selected_options and len(selected_options) > 1:
+        messagebox.showerror("Error", "When 'All' is selected, no other options can be selected.")
+        return
     
     if not directory_path or not os.path.isdir(directory_path):
         messagebox.showerror("Error", "Please select a valid directory.")
@@ -336,8 +345,8 @@ def process_files():
 
     try:
         for target_image_path in target_images: 
-            print("Cur img: ",target_image_path)
-            process_cbz_and_cbr_files(directory_path, target_image_path,"temp")  # First Function after button Press
+            print("Cur img: ", target_image_path)
+            process_cbz_and_cbr_files(directory_path, target_image_path, selected_options)  # Pass the selected options
         display_final_modified_files()  # Update the scrollable window
         messagebox.showinfo("Success", "Processing completed successfully.")
     except Exception as e:
@@ -359,6 +368,18 @@ def select_image_folder():
         entry_image.delete(0, tk.END)
         entry_image.insert(0, directory)
 
+# Function to handle checkbox validation and enforce constraints
+def validate_checkboxes():
+    """Enforce the constraints for the selection options."""
+    # If "All" is selected, disable "First" and "Last"
+    if all_var.get():
+        first_check.config(state=tk.DISABLED)
+        last_check.config(state=tk.DISABLED)
+        first_var.set(0)
+        last_var.set(0)
+    else:
+        first_check.config(state=tk.NORMAL)
+        last_check.config(state=tk.NORMAL)
 
 # Global list to keep track of successfully modified files
 final_modified_files = []
@@ -391,6 +412,28 @@ entry_image = tk.Entry(main_frame, width=50)
 entry_image.pack(pady=5)
 button_browse_image = tk.Button(main_frame, text="Browse", command=select_image_folder)
 button_browse_image.pack(pady=3)
+
+# Selection Options Frame
+options_frame = tk.LabelFrame(main_frame, text="Processing Options")
+options_frame.pack(pady=5, fill="x", padx=5)
+
+# Variables for checkboxes
+first_var = tk.IntVar()
+last_var = tk.IntVar()
+all_var = tk.IntVar()
+
+# Checkboxes for options
+first_check = tk.Checkbutton(options_frame, text="First Page", variable=first_var, 
+                           command=lambda: all_var.set(0) if first_var.get() else None)
+first_check.pack(side=tk.LEFT, padx=10, pady=5)
+
+last_check = tk.Checkbutton(options_frame, text="Last Page", variable=last_var, 
+                          command=lambda: all_var.set(0) if last_var.get() else None)
+last_check.pack(side=tk.LEFT, padx=10, pady=5)
+
+all_check = tk.Checkbutton(options_frame, text="All Pages", variable=all_var, 
+                         command=validate_checkboxes)
+all_check.pack(side=tk.LEFT, padx=10, pady=5)
 
 # Process Button
 button_process = tk.Button(main_frame, text="Process Comics", command=process_files)
